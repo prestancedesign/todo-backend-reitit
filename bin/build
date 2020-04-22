@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+clojure -A:depstar -m hf.depstar.uberjar todo-backend.jar
