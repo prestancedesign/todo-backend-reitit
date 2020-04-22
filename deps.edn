@@ -1,5 +1,6 @@
 {:deps {ring/ring-core {:mvn/version "1.8.0"}
-        ring/ring-jetty-adapter {:mvn/version "1.8.0"}}
+        ring/ring-jetty-adapter {:mvn/version "1.8.0"}
+        ring-cors {:mvn/version "0.1.13"}}
  :aliases {:depstar
            {:extra-deps
             {seancorfield/depstar {:mvn/version "1.0.94"}}}}}
