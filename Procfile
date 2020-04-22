@@ -1,1 +1,1 @@
-web: java -cp todo-backend.jar clojure.main -m todo-backend.core
+web: java -cp todo-backend.jar clojure.main -m todo-backend.core $PORT

@@ -5,6 +5,6 @@
   {:status 200
    :body "ok"})
 
-(defn -main []
-  (jetty/run-jetty #'app {:port 3000
+(defn -main [port]
+  (jetty/run-jetty #'app {:port (Integer. port)
                           :join? false}))
