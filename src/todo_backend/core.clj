@@ -10,9 +10,10 @@
 (def app-routes
   (ring/ring-handler
    (ring/router
-    [["/" {:get {:handler (fn [req] (ok "OK GET"))}
-           :post {:handler (fn [req] (ok "OK POST"))}}]
-     ["/todos" {:post {:handler (fn [req] (ok "OK POST"))}}]])))
+    [["/todos" {:get {:handler (fn [req] (ok "OK GET"))}
+                :post {:handler (fn [req] (ok "OK POST"))}}]])
+   (ring/create-default-handler
+    {:not-found (constantly {:status 404 :body "Not found"})})))
 
 (def handler
   (wrap-cors app-routes :access-control-allow-origin [#".*"]
