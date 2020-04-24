@@ -2,9 +2,8 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.cors :refer [wrap-cors]]
             [reitit.ring :as ring]
-            [ring.middleware.json :refer [wrap-json-response]]
-            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [ring.middleware.params :refer [wrap-params]]))
+            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]))
 
 (defn ok [body]
   {:status 200
@@ -13,13 +12,14 @@
 (def app-routes
   (ring/ring-handler
    (ring/router
-    [["/todos" {:get {:handler (fn [req] (ok "OK GET"))}
-                :post {:handler (fn [req] (ok (:params req)))}}]]
-    {:data {:middleware [wrap-json-response
-                         wrap-params
-                         wrap-keyword-params
+    [["/todos" {:get (fn [_] (ok "OK GET"))
+                :post (fn [req] (ok (:body req)))}]]
+    {:data {:middleware [wrap-keyword-params
+                         wrap-json-response
+                         wrap-json-body
                          [wrap-cors :access-control-allow-origin [#".*"]
                                     :access-control-allow-methods [:get :put :post :delete]]]}})
+
    (ring/create-default-handler
     {:not-found (constantly {:status 404 :body "Not found"})})))
 
