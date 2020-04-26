@@ -13,7 +13,9 @@
   (ring/ring-handler
    (ring/router
     [["/todos" {:get (fn [_] (ok "OK GET"))
-                :post (fn [req] (ok (:body req)))}]]
+                :post (fn [req] (ok (:body req)))
+                :delete (fn [_] {:status 204})
+                :options (fn [_] {:status 200})}]]
     {:data {:middleware [wrap-keyword-params
                          wrap-json-response
                          wrap-json-body
