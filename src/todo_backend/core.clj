@@ -12,7 +12,7 @@
 (def app-routes
   (ring/ring-handler
    (ring/router
-    [["/todos" {:get (fn [_] (ok "OK GET"))
+    [["/todos" {:get (fn [_] (ok []))
                 :post (fn [req] (ok (:body req)))
                 :delete (fn [_] {:status 204})
                 :options (fn [_] {:status 200})}]]
