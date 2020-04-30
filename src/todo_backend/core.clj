@@ -3,7 +3,8 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [reitit.ring :as ring]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
-            [ring.middleware.keyword-params :refer [wrap-keyword-params]]))
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [todo-backend.store :as store]))
 
 (defn ok [body]
   {:status 200
@@ -12,9 +13,13 @@
 (def app-routes
   (ring/ring-handler
    (ring/router
-    [["/todos" {:get (fn [_] (ok []))
-                :post (fn [req] (ok (:body req)))
-                :delete (fn [_] {:status 204})
+    [["/todos" {:get (fn [_] (-> (store/get-all-todos)
+                                ok))
+                :post (fn [{:keys [body]}] (-> body
+                                              store/create-todos
+                                              ok))
+                :delete (fn [_] (store/delete-all-todos)
+                               {:status 204})
                 :options (fn [_] {:status 200})}]]
     {:data {:middleware [wrap-keyword-params
                          wrap-json-response

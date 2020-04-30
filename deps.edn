@@ -1,9 +1,13 @@
-{:deps
+{:paths ["src" "resources"]
+ :deps
  {ring/ring-core {:mvn/version "1.8.0"},
   ring/ring-jetty-adapter {:mvn/version "1.8.0"},
   ring-cors {:mvn/version "0.1.13"},
   metosin/reitit-ring {:mvn/version "0.4.2"},
-  ring/ring-json {:mvn/version "0.5.0"}},
+  ring/ring-json {:mvn/version "0.5.0"}
+  seancorfield/next.jdbc {:mvn/version "1.0.424"}
+  org.postgresql/postgresql {:mvn/version "42.2.12"}
+  ragtime {:mvn/version "0.8.0"}}
  :aliases
  {:depstar
   {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}}}}
