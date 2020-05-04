@@ -1,2 +1,2 @@
-{:up ["CREATE TABLE todos (id serial primary key, title varchar(255), \"order\" int, completed boolean default false);"]
+{:up ["CREATE TABLE todos (id serial primary key, title varchar(255), position int, completed boolean default false);"]
  :down ["DROP TABLE todos;"]}

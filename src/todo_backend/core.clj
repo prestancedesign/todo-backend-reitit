@@ -23,7 +23,7 @@
                 :options (fn [_] {:status 200})}]]
     {:data {:middleware [wrap-keyword-params
                          wrap-json-response
-                         wrap-json-body
+                         [wrap-json-body {:keywords? true}]
                          [wrap-cors :access-control-allow-origin [#".*"]
                                     :access-control-allow-methods [:get :put :post :delete]]]}})
 
