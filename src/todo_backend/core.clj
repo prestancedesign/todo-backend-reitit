@@ -10,13 +10,18 @@
   {:status 200
    :body body})
 
+(defn append-todo-url [todo]
+  (assoc todo :url (str "/todos/" (:id todo))))
+
 (def app-routes
   (ring/ring-handler
    (ring/router
     [["/todos" {:get (fn [_] (-> (store/get-all-todos)
+                                (#(map append-todo-url %))
                                 ok))
                 :post (fn [{:keys [body]}] (-> body
                                               store/create-todos
+                                              append-todo-url
                                               ok))
                 :delete (fn [_] (store/delete-all-todos)
                                {:status 204})

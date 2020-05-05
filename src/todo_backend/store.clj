@@ -11,13 +11,14 @@
   (dissoc (assoc row :position (:order row)) :order))
 
 (defn create-todos [todo]
-  (sql/insert! ds :todos (as-row todo)))
+  (sql/insert! ds :todos (as-row todo)
+               {:builder-fn rs/as-unqualified-lower-maps}))
 
 (defn delete-todos [id]
   (sql/delete! ds :todos {:id id}))
 
 (defn get-all-todos []
-  (jdbc/execute! ds ["SELECT title, position, completed FROM todos; "]
+  (jdbc/execute! ds ["SELECT * FROM todos; "]
                  {:builder-fn rs/as-unqualified-lower-maps}))
 
 (defn delete-all-todos []
