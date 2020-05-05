@@ -11,7 +11,8 @@
    :body body})
 
 (defn append-todo-url [todo]
-  (assoc todo :url (str "/todos/" (:id todo))))
+  ;TODO: Remove static URI before final Heroku deployment
+  (assoc todo :url (str "http://localhost:3000/todos/" (:id todo))))
 
 (def app-routes
   (ring/ring-handler
@@ -25,7 +26,10 @@
                                               ok))
                 :delete (fn [_] (store/delete-all-todos)
                                {:status 204})
-                :options (fn [_] {:status 200})}]]
+                :options (fn [_] {:status 200})}]
+     ["/todos/:id" {:get (fn [{{id :id} :path-params}] (-> (store/get-todo id)
+                                                          append-todo-url
+                                                          ok))}]]
     {:data {:middleware [wrap-keyword-params
                          wrap-json-response
                          [wrap-json-body {:keywords? true}]
