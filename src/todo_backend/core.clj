@@ -29,12 +29,18 @@
                 :options (fn [_] {:status 200})}]
      ["/todos/:id" {:get (fn [{{id :id} :path-params}] (-> (store/get-todo id)
                                                           append-todo-url
-                                                          ok))}]]
+                                                          ok))
+                    :patch (fn [{{id :id} :path-params body :body}] (-> body
+                                                                       (#(store/update-todo id %))
+                                                                       append-todo-url
+                                                                       ok))
+                    :delete (fn [{{id :id} :path-params}] (store/delete-todos id)
+                                                         {:status 204})}]]
     {:data {:middleware [wrap-keyword-params
                          wrap-json-response
                          [wrap-json-body {:keywords? true}]
                          [wrap-cors :access-control-allow-origin [#".*"]
-                                    :access-control-allow-methods [:get :put :post :delete]]]}})
+                                    :access-control-allow-methods [:get :put :post :patch :delete]]]}})
 
    (ring/create-default-handler
     {:not-found (constantly {:status 404 :body "Not found"})})))
