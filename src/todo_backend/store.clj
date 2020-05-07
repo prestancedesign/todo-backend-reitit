@@ -10,16 +10,19 @@
 (defn as-row [row]
   (dissoc (assoc row :position (:order row)) :order))
 
+(defn as-todo [row]
+  (dissoc (assoc row :order (:position row)) :position))
+
 (defn create-todos [todo]
-  (sql/insert! ds :todos (as-row todo)
-               {:builder-fn rs/as-unqualified-lower-maps}))
+  (as-todo (sql/insert! ds :todos (as-row todo)
+                        {:builder-fn rs/as-unqualified-lower-maps})))
 
 (defn get-todo [id]
-  (sql/get-by-id ds :todos (Integer. id)
-                 {:builder-fn rs/as-unqualified-lower-maps}))
+  (as-todo (sql/get-by-id ds :todos (Integer. id)
+                          {:builder-fn rs/as-unqualified-lower-maps})))
 
-(defn update-todo [id title]
-  (sql/update! ds :todos title {:id (Integer. id)})
+(defn update-todo [id body]
+  (sql/update! ds :todos (as-row body) {:id (Integer. id)})
   (get-todo id))
 
 (defn delete-todos [id]
