@@ -7,7 +7,8 @@
   ring/ring-json {:mvn/version "0.5.0"}
   seancorfield/next.jdbc {:mvn/version "1.0.424"}
   org.postgresql/postgresql {:mvn/version "42.2.12"}
-  ragtime {:mvn/version "0.8.0"}}
+  ragtime {:mvn/version "0.8.0"}
+  metosin/reitit-schema {:mvn/version "0.4.2"}}
  :aliases
  {:depstar
   {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}}}}

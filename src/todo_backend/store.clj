@@ -18,15 +18,15 @@
                         {:builder-fn rs/as-unqualified-lower-maps})))
 
 (defn get-todo [id]
-  (as-todo (sql/get-by-id ds :todos (Integer. id)
+  (as-todo (sql/get-by-id ds :todos id
                           {:builder-fn rs/as-unqualified-lower-maps})))
 
 (defn update-todo [id body]
-  (sql/update! ds :todos (as-row body) {:id (Integer. id)})
+  (sql/update! ds :todos (as-row body) {:id id})
   (get-todo id))
 
 (defn delete-todos [id]
-  (sql/delete! ds :todos {:id (Integer. id)}))
+  (sql/delete! ds :todos {:id id}))
 
 (defn get-all-todos []
   (jdbc/execute! ds ["SELECT * FROM todos;"]

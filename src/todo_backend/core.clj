@@ -1,9 +1,12 @@
 (ns todo-backend.core
-  (:require [ring.adapter.jetty :as jetty]
-            [ring.middleware.cors :refer [wrap-cors]]
+  (:require reitit.coercion.schema
             [reitit.ring :as ring]
-            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
+            [reitit.ring.coercion :as rrc]
+            [ring.adapter.jetty :as jetty]
+            [ring.middleware.cors :refer [wrap-cors]]
+            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [schema.core :as s]
             [todo-backend.store :as store]))
 
 (defn ok [body]
@@ -25,18 +28,23 @@
                                               append-todo-url
                                               ok))
                 :delete (fn [_] (store/delete-all-todos)
-                               {:status 204})
+                          {:status 204})
                 :options (fn [_] {:status 200})}]
-     ["/todos/:id" {:get (fn [{{id :id} :path-params}] (-> (store/get-todo id)
-                                                          append-todo-url
-                                                          ok))
-                    :patch (fn [{{id :id} :path-params body :body}] (-> body
-                                                                       (#(store/update-todo id %))
-                                                                       append-todo-url
-                                                                       ok))
-                    :delete (fn [{{id :id} :path-params}] (store/delete-todos id)
-                                                         {:status 204})}]]
-    {:data {:middleware [wrap-keyword-params
+     ["/todos/:id" {:parameters {:path {:id s/Int}}
+                    :get (fn [{:keys [parameters]}] (-> (store/get-todo (-> parameters :path :id))
+                                                       append-todo-url
+                                                       ok))
+                    :patch (fn [{:keys [parameters body]}] (-> body
+                                                              (#(store/update-todo (-> parameters :path :id) %))
+                                                              append-todo-url
+                                                              ok))
+                    :delete (fn [{:keys [parameters]}] (store/delete-todos (-> parameters :path :id))
+                              {:status 204})}]]
+    {:data {:coercion reitit.coercion.schema/coercion
+            :middleware [rrc/coerce-response-middleware
+                         rrc/coerce-request-middleware
+                         rrc/coerce-exceptions-middleware
+                         wrap-keyword-params
                          wrap-json-response
                          [wrap-json-body {:keywords? true}]
                          [wrap-cors :access-control-allow-origin [#".*"]
