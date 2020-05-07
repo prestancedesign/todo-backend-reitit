@@ -1,5 +1,6 @@
 (ns todo-backend.store
-  (:require [next.jdbc :as jdbc]
+  (:require [clojure.set :refer [rename-keys]]
+            [next.jdbc :as jdbc]
             [next.jdbc.result-set :as rs]
             [next.jdbc.sql :as sql]))
 
@@ -8,10 +9,10 @@
 (def ds (jdbc/get-datasource db))
 
 (defn as-row [row]
-  (dissoc (assoc row :position (:order row)) :order))
+  (rename-keys row {:order :position}))
 
 (defn as-todo [row]
-  (dissoc (assoc row :order (:position row)) :position))
+  (rename-keys row {:position :order}))
 
 (defn create-todos [todo]
   (as-todo (sql/insert! ds :todos (as-row todo)
