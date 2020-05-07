@@ -4,7 +4,7 @@
             [next.jdbc.result-set :as rs]
             [next.jdbc.sql :as sql]))
 
-(def db {:dbtype "postgres" :dbname "todos" :user "postgres" :password "mypass"})
+(def db (System/getenv "JDBC_DATABASE_URL"))
 
 (def ds (jdbc/get-datasource db))
 
