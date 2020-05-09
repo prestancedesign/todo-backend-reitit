@@ -14,8 +14,7 @@
    :body body})
 
 (defn append-todo-url [todo]
-  ;TODO: Remove static URI before final Heroku deployment
-  (assoc todo :url (str "http://localhost:3000/todos/" (:id todo))))
+  (assoc todo :url (str "/todos/" (:id todo))))
 
 (def app-routes
   (ring/ring-handler
