@@ -13,30 +13,32 @@
   {:status 200
    :body body})
 
-(defn append-todo-url [todo]
-  (assoc todo :url (str "/todos/" (:id todo))))
+(defn append-todo-url [todo request]
+  (let [host (-> request :headers (get "host" "localhost"))
+        scheme (name (:scheme request))
+        id (:id todo)]
+    (println (str scheme "://" host "/todos/" id))
+    (merge todo {:url (str scheme "://" host "/todos/" id)})))
 
 (def app-routes
   (ring/ring-handler
    (ring/router
-    [["/todos" {:get (fn [_] (-> (store/get-all-todos)
-                                (#(map append-todo-url %))
-                                ok))
-                :post (fn [{:keys [body]}] (-> body
-                                              store/create-todos
-                                              append-todo-url
-                                              ok))
+    [["/todos" {:get (fn [req] (ok (map #(append-todo-url % req) (store/get-all-todos))))
+                :post (fn [{:keys [body] :as req}] (-> body
+                                                      store/create-todos
+                                                      (#(append-todo-url % req))
+                                                      ok))
                 :delete (fn [_] (store/delete-all-todos)
                           {:status 204})
                 :options (fn [_] {:status 200})}]
      ["/todos/:id" {:parameters {:path {:id s/Int}}
-                    :get (fn [{:keys [parameters]}] (-> (store/get-todo (-> parameters :path :id))
-                                                       append-todo-url
-                                                       ok))
-                    :patch (fn [{:keys [parameters body]}] (-> body
-                                                              (#(store/update-todo (-> parameters :path :id) %))
-                                                              append-todo-url
-                                                              ok))
+                    :get (fn [{:keys [parameters] :as req}] (-> (store/get-todo (-> parameters :path :id))
+                                                               (#(append-todo-url % req))
+                                                               ok))
+                    :patch (fn [{:keys [parameters body] :as req}] (-> body
+                                                                      (#(store/update-todo (-> parameters :path :id) %))
+                                                                      (#(append-todo-url % req))
+                                                                      ok))
                     :delete (fn [{:keys [parameters]}] (store/delete-todos (-> parameters :path :id))
                               {:status 204})}]]
     {:data {:coercion reitit.coercion.schema/coercion
