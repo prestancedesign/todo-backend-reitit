@@ -17,7 +17,6 @@
   (let [host (-> request :headers (get "host" "localhost"))
         scheme (name (:scheme request))
         id (:id todo)]
-    (println (str scheme "://" host "/todos/" id))
     (merge todo {:url (str scheme "://" host "/todos/" id)})))
 
 (def app-routes
