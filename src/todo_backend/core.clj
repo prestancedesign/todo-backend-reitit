@@ -31,14 +31,14 @@
                           {:status 204})
                 :options (fn [_] {:status 200})}]
      ["/todos/:id" {:parameters {:path {:id s/Int}}
-                    :get (fn [{:keys [parameters] :as req}] (-> (store/get-todo (-> parameters :path :id))
+                    :get (fn [{:keys [parameters] :as req}] (-> (store/get-todo (get-in parameters [:path :id]))
                                                                (append-todo-url req)
                                                                ok))
                     :patch (fn [{:keys [parameters body] :as req}] (-> body
-                                                                      (#(store/update-todo (-> parameters :path :id) %))
+                                                                      (store/update-todo (get-in parameters [:path :id]))
                                                                       (append-todo-url req)
                                                                       ok))
-                    :delete (fn [{:keys [parameters]}] (store/delete-todos (-> parameters :path :id))
+                    :delete (fn [{:keys [parameters]}] (store/delete-todos (get-in parameters [:path :id]))
                               {:status 204})}]]
     {:data {:coercion reitit.coercion.schema/coercion
             :middleware [rrc/coerce-response-middleware

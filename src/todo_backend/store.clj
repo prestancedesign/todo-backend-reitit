@@ -22,7 +22,7 @@
   (as-todo (sql/get-by-id ds :todos id
                           {:builder-fn rs/as-unqualified-lower-maps})))
 
-(defn update-todo [id body]
+(defn update-todo [body id]
   (sql/update! ds :todos (as-row body) {:id id})
   (get-todo id))
 
