@@ -25,18 +25,18 @@
     [["/todos" {:get (fn [req] (ok (map #(append-todo-url % req) (store/get-all-todos))))
                 :post (fn [{:keys [body] :as req}] (-> body
                                                       store/create-todos
-                                                      (#(append-todo-url % req))
+                                                      (append-todo-url req)
                                                       ok))
                 :delete (fn [_] (store/delete-all-todos)
                           {:status 204})
                 :options (fn [_] {:status 200})}]
      ["/todos/:id" {:parameters {:path {:id s/Int}}
                     :get (fn [{:keys [parameters] :as req}] (-> (store/get-todo (-> parameters :path :id))
-                                                               (#(append-todo-url % req))
+                                                               (append-todo-url req)
                                                                ok))
                     :patch (fn [{:keys [parameters body] :as req}] (-> body
                                                                       (#(store/update-todo (-> parameters :path :id) %))
-                                                                      (#(append-todo-url % req))
+                                                                      (append-todo-url req)
                                                                       ok))
                     :delete (fn [{:keys [parameters]}] (store/delete-todos (-> parameters :path :id))
                               {:status 204})}]]
