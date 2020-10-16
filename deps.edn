@@ -4,7 +4,8 @@
   ring/ring-jetty-adapter {:mvn/version "1.8.0"},
   ring-cors {:mvn/version "0.1.13"},
   metosin/reitit-ring {:mvn/version "0.4.2"},
-  ring/ring-json {:mvn/version "0.5.0"}
+  metosin/reitit-middleware {:mvn/version "0.5.6"},
+  metosin/muuntaja {:mvn/version "0.6.7"},
   seancorfield/next.jdbc {:mvn/version "1.0.424"}
   org.postgresql/postgresql {:mvn/version "42.2.12"}
   ragtime {:mvn/version "0.8.0"}
