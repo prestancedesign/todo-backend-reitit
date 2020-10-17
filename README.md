@@ -18,17 +18,6 @@ First you must run a Postgres server with Docker for eg.:
 $ docker run --name some-postgres -e POSTGRES_DB=todos -e POSTGRES_PASSWORD=mypass -d -p 5432:5432 postgres
 ```
 
-Migrate database schema in REPL
-
-```
-$ clj -A:dev
-```
-
-Once REPL starts, run the system:
-
-```
-user=> (migrate)
-```
 ## Run the application
 
 ```

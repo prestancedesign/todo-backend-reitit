@@ -7,7 +7,8 @@
             [ring.adapter.jetty :as jetty]
             [ring.middleware.cors :refer [wrap-cors]]
             [schema.core :as s]
-            [todo-backend.store :as store]))
+            [todo-backend.store :as store]
+            [todo-backend.migration :refer [migrate]]))
 
 (defn ok [body]
   {:status 200
@@ -53,6 +54,7 @@
     {:not-found (constantly {:status 404 :body "Not found"})})))
 
 (defn -main [port]
+  (migrate)
   (jetty/run-jetty #'app-routes {:port (Integer. port)
                                  :join? false}))
 
