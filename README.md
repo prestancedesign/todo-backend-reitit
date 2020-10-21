@@ -7,6 +7,9 @@ This is a implementation of the [Todo-Backend API spec](https://www.todobackend.
 
 The API can be hit directly at [http://todo-backend-clojure-reitit.herokuapp.com/todos](http://todo-backend-clojure-reitit.herokuapp.com/todos) or interactively used with the front end client http://www.todobackend.com/client/index.html?https://todo-backend-clojure-reitit.herokuapp.com/todos
 
+It also offers a self-hosted OpenAPI documentation, accessible via Swagger UI.
+This API is hosted on Heroku here: http://todo-backend-clojure-reitit.herokuapp.com (opens Swagger UI)
+
 It persists todos to Postgres via [next.jdbc](https://github.com/seancorfield/next-jdbc).
 
 # Run on localhost
