@@ -1,11 +1,32 @@
 (ns user
-  (:require [ragtime.jdbc :as jdbc]
-            [ragtime.repl :as repl]))
+  (:require [juxt.clip.repl :refer [start stop set-init! reset system]]
+            [juxt.clip.core :as clip]))
 
-(def config
-  {:datastore (jdbc/sql-database "jdbc:postgresql:todos?user=postgres&password=mypass")
-   :migrations (jdbc/load-resources "migrations")})
+(defn stop-jetty [jetty]
+  (.stop jetty))
+
+(def system-config
+  {:components
+   {:db
+    {:start
+     `(next.jdbc/get-datasource "jdbc:postgresql://localhost/todos?user=postgres&password=mypass")}
+
+    :router
+    {:start
+     `(todo-backend.core/app-routes (clip/ref :db))}
+
+    :http
+    {:start
+     `(ring.adapter.jetty/run-jetty
+       (clip/ref :router)
+       {:port 3005
+        :join? false})
+     :stop `user/stop-jetty}}})
+
+(set-init! (fn [] system-config))
 
 (comment
- (repl/migrate config)
- (repl/rollback config))
+  (start)
+  (reset)
+  (stop)
+  system)
