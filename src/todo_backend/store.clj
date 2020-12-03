@@ -4,34 +4,30 @@
             [next.jdbc.result-set :as rs]
             [next.jdbc.sql :as sql]))
 
-(def db (System/getenv "JDBC_DATABASE_URL"))
-
-(def ds (jdbc/get-datasource db))
-
 (defn as-row [row]
   (rename-keys row {:order :position}))
 
 (defn as-todo [row]
   (rename-keys row {:position :order}))
 
-(defn create-todos [todo]
-  (as-todo (sql/insert! ds :todos (as-row todo)
+(defn create-todos [todo db]
+  (as-todo (sql/insert! db :todos (as-row todo)
                         {:builder-fn rs/as-unqualified-lower-maps})))
 
-(defn get-todo [id]
-  (as-todo (sql/get-by-id ds :todos id
+(defn get-todo [id db]
+  (as-todo (sql/get-by-id db :todos id
                           {:builder-fn rs/as-unqualified-lower-maps})))
 
-(defn update-todo [body id]
-  (sql/update! ds :todos (as-row body) {:id id})
-  (get-todo id))
+(defn update-todo [body id db]
+  (sql/update! db :todos (as-row body) {:id id})
+  (get-todo id db))
 
-(defn delete-todos [id]
-  (sql/delete! ds :todos {:id id}))
+(defn delete-todos [id db]
+  (sql/delete! db :todos {:id id}))
 
-(defn get-all-todos []
-  (jdbc/execute! ds ["SELECT * FROM todos;"]
+(defn get-all-todos [db]
+  (jdbc/execute! db ["SELECT * FROM todos"]
                  {:builder-fn rs/as-unqualified-lower-maps}))
 
-(defn delete-all-todos []
-  (sql/delete! ds :todos [true]))
+(defn delete-all-todos [db]
+  (sql/delete! db :todos [true]))
