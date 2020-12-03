@@ -1,0 +1,20 @@
+{:database-uri #env JDBC_DATABASE_URL
+ :components
+ {:db
+  {:pre-start
+   (ragtime.repl/migrate {:datastore (ragtime.jdbc/sql-database #ref [:database-uri])
+                          :migrations (ragtime.jdbc/load-resources "migrations")})
+   :start
+   (next.jdbc/get-datasource #ref [:database-uri])}
+
+  :router
+  {:start
+   (todo-backend.core/app-routes (clip/ref :db))}
+
+  :http
+  {:start
+   (ring.adapter.jetty/run-jetty
+    (clip/ref :router)
+    {:port #long #or [#env PORT 3000]
+     :join? false})
+   :stop (.stop this)}}}

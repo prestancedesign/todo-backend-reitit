@@ -8,7 +8,8 @@
   seancorfield/next.jdbc {:mvn/version "1.1.610"}
   org.postgresql/postgresql {:mvn/version "42.2.18"}
   ragtime/ragtime {:mvn/version "0.8.0"}
-  juxt/clip {:mvn/version "0.20.0"}}
+  juxt/clip {:mvn/version "0.20.0"}
+  aero/aero {:mvn/version "1.1.6"}}
  :aliases
  {:depstar {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}}
   :dev {:extra-paths ["dev"]
