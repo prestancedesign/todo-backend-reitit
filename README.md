@@ -30,6 +30,8 @@ $ export JDBC_DATABASE_URL="jdbc:postgresql://localhost/todos?user=postgres&pass
 $ clj -m todo-backend.core
 ```
 
+Now acces the app at: [http://localhost:3000/](http://localhost:3000/).
+
 If that port is in use, start it on a different port. For example, port 8100:
 
 ```
@@ -48,7 +50,6 @@ Once REPL starts, run the system:
 ```
 user=> (start)
 ```
-Now acces the app at: [[http://localhost:3000/][http://localhost:3000/]].
 
 You can also resetting app state after changing code, stopping the app:
 
