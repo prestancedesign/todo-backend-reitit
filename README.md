@@ -3,7 +3,7 @@ Todo-Backend in Clojure
 
 This is a implementation of the [Todo-Backend API spec](https://www.todobackend.com/), using Clojure, Ring/Reitit, Clip and next-jdbc.
 
-![Todo Backend](https://github.com/PrestanceDesign/todo-backend-clojure-reitit/blob/master/todobackend.png)
+![Todo Backend](https://github.com/PrestanceDesign/todo-backend-clojure-reitit/blob/clip/todobackend.png)
 
 The API can be hit directly at [http://todo-backend-clojure-reitit.herokuapp.com/todos](http://todo-backend-clojure-reitit.herokuapp.com/todos) or interactively used with the front end client http://www.todobackend.com/client/index.html?https://todo-backend-clojure-reitit.herokuapp.com/todos
 
