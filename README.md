@@ -1,7 +1,7 @@
 Todo-Backend in Clojure
 ====================
 
-This is a implementation of the [Todo-Backend API spec](https://www.todobackend.com/), using Clojure, Ring/Reitit and next-jdbc.
+This is a implementation of the [Todo-Backend API spec](https://www.todobackend.com/), using Clojure, Ring/Reitit, Clip and next-jdbc.
 
 ![Todo Backend](https://github.com/PrestanceDesign/todo-backend-clojure-reitit/blob/master/todobackend.png)
 
@@ -11,6 +11,8 @@ It also offers a self-hosted OpenAPI documentation, accessible via Swagger UI.
 This API is hosted on Heroku here: http://todo-backend-clojure-reitit.herokuapp.com (opens Swagger UI)
 
 It persists todos to Postgres via [next.jdbc](https://github.com/seancorfield/next-jdbc).
+
+On the `clip` branch, depencies injection, application state and reloaded workflow is managed with the [Juxt Clip](https://github.com/juxt/clip) library.
 
 # Run on localhost
 
@@ -25,14 +27,41 @@ $ docker run --name some-postgres -e POSTGRES_DB=todos -e POSTGRES_PASSWORD=mypa
 
 ```
 $ export JDBC_DATABASE_URL="jdbc:postgresql://localhost/todos?user=postgres&password=mypass"
-$ clj -m todo-backend.core 3000
+$ clj -m todo-backend.core
 ```
 
 If that port is in use, start it on a different port. For example, port 8100:
 
 ```
-$ clj -m todo-backend.core 8100
+$ export PORT=8100
+$ clj -m todo-backend.core
 ```
+
+## Run the Application in REPL
+
+```
+$ clj -A:dev
+```
+
+Once REPL starts, run the system:
+
+```
+user=> (start)
+```
+Now acces the app at: [[http://localhost:3000/][http://localhost:3000/]].
+
+You can also resetting app state after changing code, stopping the app:
+
+
+```
+user=> (reset)
+user=> (stop)
+```
+
+For Emacs CIDER users, a `.dir-locals.el` file is configured to load the `dev` alias automatically when `cider-jack-in`.
+
+For code reloading, `cider-ns-refresh` hook is configured.
+Calling `cider-ns-refresh` (Spacemacs: `, e n r`) will stop the system, reload all namespaces, and restart the app.
 
 # License & Copyright
 
