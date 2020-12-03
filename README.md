@@ -60,7 +60,7 @@ user=> (stop)
 
 For Emacs CIDER users, a `.dir-locals.el` file is configured to load the `dev` alias automatically when `cider-jack-in`.
 
-For code reloading, `cider-ns-refresh` hook is configured.
+For code reloading, `cider-ns-refresh` hooks are configured.
 Calling `cider-ns-refresh` (Spacemacs: `, e n r`) will stop the system, reload all namespaces, and restart the app.
 
 # License & Copyright
