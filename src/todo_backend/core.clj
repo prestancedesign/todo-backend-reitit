@@ -1,5 +1,7 @@
 (ns todo-backend.core
-  (:require [juxt.clip.core :as clip]
+  (:require [aero.core :refer [read-config]]
+            [clojure.java.io :as io]
+            [juxt.clip.core :as clip]
             [muuntaja.core :as m]
             [reitit.coercion.schema :as rcs]
             [reitit.ring :as ring]
@@ -9,8 +11,7 @@
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
             [schema.core :as s]
-            [todo-backend.store :as store]
-            [todo-backend.system :refer [system-config]]))
+            [todo-backend.store :as store]))
 
 (defn ok [body]
   {:status 200
@@ -69,6 +70,7 @@
    (ring/create-default-handler
     {:not-found (constantly {:status 404 :body "Not found"})})))
 
-(defn -main [& _]
-  (clip/start system-config)
-  @(promise))
+(defn -main []
+  (let [system-config (read-config (io/resource "config.edn"))]
+    (clip/start system-config)
+    @(promise)))
